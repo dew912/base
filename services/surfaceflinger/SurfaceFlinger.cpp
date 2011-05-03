@@ -1056,15 +1056,15 @@ status_t SurfaceFlinger::addLayer_l(const sp<LayerBase>& layer)
 ssize_t SurfaceFlinger::addClientLayer(const sp<Client>& client,
         const sp<LayerBaseClient>& lbc)
 {
-    Mutex::Autolock _l(mStateLock);
-
     // attach this layer to the client
-    ssize_t name = client->attachLayer(lbc);
+    size_t name = client->attachLayer(lbc);
+
+    Mutex::Autolock _l(mStateLock);
 
     // add this layer to the current state list
     addLayer_l(lbc);
 
-    return name;
+    return ssize_t(name);
 }
 
 status_t SurfaceFlinger::removeLayer(const sp<LayerBase>& layer)
@@ -2304,15 +2304,17 @@ status_t Client::initCheck() const {
     return NO_ERROR;
 }
 
-ssize_t Client::attachLayer(const sp<LayerBaseClient>& layer)
+size_t Client::attachLayer(const sp<LayerBaseClient>& layer)
 {
-    int32_t name = android_atomic_inc(&mNameGenerator);
+    Mutex::Autolock _l(mLock);
+    size_t name = mNameGenerator++;
     mLayers.add(name, layer);
     return name;
 }
 
 void Client::detachLayer(const LayerBaseClient* layer)
 {
+    Mutex::Autolock _l(mLock);
     // we do a linear search here, because this doesn't happen often
     const size_t count = mLayers.size();
     for (size_t i=0 ; i<count ; i++) {
@@ -2322,9 +2324,11 @@ void Client::detachLayer(const LayerBaseClient* layer)
         }
     }
 }
-sp<LayerBaseClient> Client::getLayerUser(int32_t i) const {
+sp<LayerBaseClient> Client::getLayerUser(int32_t i) const
+{
+    Mutex::Autolock _l(mLock);
     sp<LayerBaseClient> lbc;
-    const wp<LayerBaseClient>& layer(mLayers.valueFor(i));
+    wp<LayerBaseClient> layer(mLayers.valueFor(i));
     if (layer != 0) {
         lbc = layer.promote();
         LOGE_IF(lbc==0, "getLayerUser(name=%d) is dead", int(i));
