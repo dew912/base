@@ -331,6 +331,7 @@ private:
             status_t    purgatorizeLayer_l(const sp<LayerBase>& layer);
 
             uint32_t    getTransactionFlags(uint32_t flags);
+            uint32_t    peekTransactionFlags(uint32_t flags);
             uint32_t    setTransactionFlags(uint32_t flags);
             void        commitTransaction();
 
