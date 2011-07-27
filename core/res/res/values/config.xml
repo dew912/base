@@ -432,7 +432,17 @@
          even on EVDO -->
     <bool name="config_alwaysUseCdmaRssi">false</bool>
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> d9b144a... Adding a new config value used to tell StatusBarPolicy to always use CDMA
 =======
 >>>>>>> d9b144a... Adding a new config value used to tell StatusBarPolicy to always use CDMA
+=======
+
+    <!-- If this value is true, duplicate Source/Destination port fields
+         in WDP header of some carriers OMADM wap push are supported.
+         ex: MSGTYPE-TotalSegments-CurrentSegment
+             -SourcePortDestPort-SourcePortDestPort-OMADM PDU
+         If false, not supported. -->
+    <bool name="config_duplicate_port_omadm_wappush">false</bool>
+>>>>>>> 0a45631... Ignore duplicate WAP push PDU source/destination port if configured
 </resources>
