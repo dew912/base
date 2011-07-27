@@ -47,11 +47,21 @@ public class GsmAlphabet {
 
 
     /**
+<<<<<<< HEAD
      * char to GSM alphabet char
      * Returns ' ' in GSM alphabet if there's no possible match
      * Returns GSM_EXTENDED_ESCAPE if this character is in the extended table
      * In this case, you must call charToGsmExtended() for the value that
      * should follow GSM_EXTENDED_ESCAPE in the GSM alphabet string
+=======
+     * Converts a char to a GSM 7 bit table index.
+     * Returns ' ' in GSM alphabet if there's no possible match. Returns
+     * GSM_EXTENDED_ESCAPE if this character is in the extended table.
+     * In this case, you must call charToGsmExtended() for the value
+     * that should follow GSM_EXTENDED_ESCAPE in the GSM alphabet string.
+     * @param c the character to convert
+     * @return the GSM 7 bit table index for the specified character
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      */
     public static int
     charToGsm(char c) {
@@ -64,13 +74,20 @@ public class GsmAlphabet {
     }
 
     /**
+<<<<<<< HEAD
      * char to GSM alphabet char
+=======
+     * Converts a char to a GSM 7 bit table index.
+     * Returns GSM_EXTENDED_ESCAPE if this character is in the extended table.
+     * In this case, you must call charToGsmExtended() for the value that
+     * should follow GSM_EXTENDED_ESCAPE in the GSM alphabet string.
+     *
+     * @param c the character to convert
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      * @param throwException If true, throws EncodeException on invalid char.
      *   If false, returns GSM alphabet ' ' char.
-     *
-     * Returns GSM_EXTENDED_ESCAPE if this character is in the extended table
-     * In this case, you must call charToGsmExtended() for the value that
-     * should follow GSM_EXTENDED_ESCAPE in the GSM alphabet string
+     * @throws EncodeException encode error when throwException is true
+     * @return the GSM 7 bit table index for the specified character
      */
 
     public static int
@@ -99,12 +116,20 @@ public class GsmAlphabet {
 
 
     /**
+<<<<<<< HEAD
      * char to extended GSM alphabet char
      *
      * Extended chars should be escaped with GSM_EXTENDED_ESCAPE
      *
      * Returns ' ' in GSM alphabet if there's no possible match
      *
+=======
+     * Converts a char to an extended GSM 7 bit table index.
+     * Extended chars should be escaped with GSM_EXTENDED_ESCAPE.
+     * Returns ' ' in GSM alphabet if there's no possible match.
+     * @param c the character to convert
+     * @return the GSM 7 bit extended table index for the specified character
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      */
     public static int
     charToGsmExtended(char c) {
@@ -126,7 +151,14 @@ public class GsmAlphabet {
      * the following character in the stream should be decoded with
      * gsmExtendedToChar()
      *
+<<<<<<< HEAD
      * If an unmappable value is passed (one greater than 127), ' ' is returned
+=======
+     * If an unmappable value is passed (one greater than 127), ' ' is returned.
+     *
+     * @param gsmChar the GSM 7 bit table index to convert
+     * @return the decoded character
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      */
 
     public static char
@@ -141,7 +173,15 @@ public class GsmAlphabet {
      * extension page has yet been defined (see Note 1 in table 6.2.1.1 of
      * TS 23.038 v7.00)
      *
+<<<<<<< HEAD
      * If an unmappable value is passed , ' ' is returned
+=======
+     * If an unmappable value is passed, the character from the GSM 7 bit
+     * default table will be used (table 6.2.1.1 of TS 23.038).
+     *
+     * @param gsmChar the GSM 7 bit extended table index to convert
+     * @return the decoded character
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      */
 
     public static char
@@ -205,6 +245,33 @@ public class GsmAlphabet {
      * septets.
      *
      * @param data the data string to encode
+<<<<<<< HEAD
+=======
+     * @return the encoded string
+     * @throws EncodeException if String is too large to encode
+     */
+    public static byte[] stringToGsm7BitPacked(String data)
+            throws EncodeException {
+        return stringToGsm7BitPacked(data, 0, true, 0, 0);
+    }
+
+    /**
+     * Converts a String into a byte array containing
+     * the 7-bit packed GSM Alphabet representation of the string.
+     *
+     * Unencodable chars are encoded as spaces
+     *
+     * Byte 0 in the returned byte array is the count of septets used
+     * The returned byte array is the minimum size required to store
+     * the packed septets. The returned array cannot contain more than 255
+     * septets.
+     *
+     * @param data the data string to encode
+     * @param languageTable the 7 bit language table, or 0 for the default GSM alphabet
+     * @param languageShiftTable the 7 bit single shift language table, or 0 for the default
+     *     GSM extension table
+     * @return the encoded string
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      * @throws EncodeException if String is too large to encode
      */
     public static byte[] stringToGsm7BitPacked(String data)
@@ -352,6 +419,11 @@ public class GsmAlphabet {
      *
      * Field may be padded with trailing 0xff's. The decode stops
      * at the first 0xff encountered.
+     *
+     * @param data the byte array to decode
+     * @param offset array offset for the first character to decode
+     * @param length the number of bytes to decode
+     * @return the decoded string
      */
     public static String
     gsm8BitUnpackedToString(byte[] data, int offset, int length) {
@@ -390,8 +462,15 @@ public class GsmAlphabet {
     }
 
     /**
+<<<<<<< HEAD
      * Convert a string into an 8-bit unpacked GSM alphabet byte
      * array
+=======
+     * Convert a string into an 8-bit unpacked GSM alphabet byte array.
+     * Always uses GSM default 7-bit alphabet and extension table.
+     * @param s the string to encode
+     * @return the 8-bit GSM encoded byte array for the string
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      */
     public static byte[]
     stringToGsm8BitPacked(String s) {
@@ -412,11 +491,13 @@ public class GsmAlphabet {
 
     /**
      * Write a String into a GSM 8-bit unpacked field of
-     * @param length size at @param offset in @param dest
-     *
      * Field is padded with 0xff's, string is truncated if necessary
+     *
+     * @param s the string to encode
+     * @param dest the destination byte array
+     * @param offset the starting offset for the encoded string
+     * @param length the maximum number of bytes to write
      */
-
     public static void
     stringToGsm8BitUnpackedField(String s, byte dest[], int offset, int length) {
         int outByteIndex = offset;
@@ -453,6 +534,8 @@ public class GsmAlphabet {
     /**
      * Returns the count of 7-bit GSM alphabet characters
      * needed to represent this character. Counts unencodable char as 1 septet.
+     * @param c the character to examine
+     * @return the number of septets for this character
      */
     public static int
     countGsmSeptets(char c) {
@@ -466,9 +549,16 @@ public class GsmAlphabet {
 
     /**
      * Returns the count of 7-bit GSM alphabet characters
+<<<<<<< HEAD
      * needed to represent this character
+=======
+     * needed to represent this character using the default 7 bit GSM alphabet.
+     * @param c the character to examine
+>>>>>>> 94798ff... Enable full support for SMS Cell Broadcast.
      * @param throwsException If true, throws EncodeException if unencodable
-     * char. Otherwise, counts invalid char as 1 septet
+     * char. Otherwise, counts invalid char as 1 septet.
+     * @return the number of septets for this character
+     * @throws EncodeException the character can't be encoded and throwsException is true
      */
     public static int
     countGsmSeptets(char c, boolean throwsException) throws EncodeException {
